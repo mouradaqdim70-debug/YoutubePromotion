@@ -1,57 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FlappyNova Video Hub</title>
-<style>
-body {
-  margin:0; font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(135deg,#00b894,#0984e3,#636e72);
-  color:#fff; display:flex; justify-content:center; align-items:center; height:100vh;
-}
-.card {
-  background: rgba(255,255,255,0.1); border-radius:15px; padding:30px;
-  box-shadow:0 5px 20px rgba(0,0,0,0.3); width:90%; max-width:400px;
-  text-align:center; animation:fadeIn 1s ease forwards;
-}
-input,button {width:100%; padding:10px; margin:10px 0; border-radius:10px; border:none; font-size:1rem;}
-button {background:#00b894; color:white; cursor:pointer; transition:0.3s;}
-button:hover {background:#00ffdd; color:black;}
-h2{color:#00ffdd; margin-top:0;}
-@keyframes fadeIn{0%{opacity:0;transform:translateY(-20px);}100%{opacity:1;transform:translateY(0);}}
-</style>
-</head>
-<body>
-
-<div class="card" id="signupCard">
-  <h2>Sign Up</h2>
-  <input type="text" id="username" placeholder="Enter your name">
-  <input type="email" id="email" placeholder="Enter your email">
-  <button onclick="signUp()">Sign Up</button>
-  <p id="signupMessage"></p>
-</div>
-
-<div class="card" id="postCard" style="display:none;">
-  <h2>Post Your YouTube Video</h2>
-  <input type="text" id="videoLink" placeholder="Enter YouTube video link">
-  <button onclick="postVideo()">Post Video</button>
-  <p id="postMessage"></p>
-  <h2>Submitted Videos</h2>
-  <ul id="videoList"></ul>
-</div>
-
 <script>
-let users = [], videos = [];
+let videos = [];
+
+// Sign up function
 function signUp(){
   const u = document.getElementById('username').value.trim();
   const e = document.getElementById('email').value.trim();
   if(!u||!e){document.getElementById('signupMessage').innerText="Enter name & email!"; return;}
-  users.push({u,e});
+  
+  // Save username in local storage
+  localStorage.setItem('username', u);
+
   document.getElementById('signupMessage').innerText=`Welcome, ${u}!`;
   document.getElementById('signupCard').style.display='none';
   document.getElementById('postCard').style.display='block';
 }
+
+// Post video function
 function postVideo(){
   const link = document.getElementById('videoLink').value.trim();
   if(!link){document.getElementById('postMessage').innerText="Enter a YouTube link!"; return;}
@@ -62,7 +26,15 @@ function postVideo(){
   document.getElementById('postMessage').innerText="Video posted!";
   document.getElementById('videoLink').value='';
 }
+
+// Check if user already signed up
+window.onload = function(){
+  const savedUser = localStorage.getItem('username');
+  if(savedUser){
+    document.getElementById('signupCard').style.display='none';
+    document.getElementById('postCard').style.display='block';
+    document.getElementById('signupMessage').innerText=`Welcome back, ${savedUser}!`;
+  }
+}
 </script>
 
-</body>
-</html>
